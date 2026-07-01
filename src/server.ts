@@ -6,6 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import { isTest } from '../env.ts'
+import { errorHandler, notFound } from './middleware/errorHandler.ts'
 
 const app = express()
 app.use(helmet()) // for setting various HTTP headers to enhance security
@@ -25,6 +26,12 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/habits', habitRoutes)
+
+// 404 handler
+app.use(notFound)
+
+// Global error handler - MUST be last
+app.use(errorHandler)
 
 export { app }
 
